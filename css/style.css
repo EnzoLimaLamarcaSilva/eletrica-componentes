@@ -1,0 +1,151 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CORPO */
+body {
+    /* Gradiente: Preto nas pontas, amarelo nas transições e roxo no centro (tudo em RGB) */
+    background: linear-gradient(to right, rgb(0, 0, 0), rgb(255, 230, 0), rgb(105, 12, 226), rgb(255, 230, 0), rgb(0, 0, 0));
+    background-attachment: fixed; /* O gradiente não "quebra" ao rolar a página */
+    color: rgb(255, 255, 255);
+    font-family: 'Segoe UI', Arial, sans-serif; /* Fonte mais moderna */
+    font-size: 1.1rem;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* HEADER & MENU */
+header {
+    margin: 8px 0 20px 0;
+    /* Gradiente invertido para destacar o topo: Preto nas pontas, amarelo e roxo no centro */
+    background: linear-gradient(to right, rgb(0, 0, 0), rgb(255, 230, 0), rgb(105, 12, 226), rgb(255, 230, 0), rgb(0, 0, 0));
+    padding: 15px 0;
+    border-radius: 12px; /* Arredondado para combinar com os botões */
+    border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Garante que os botões quebrem linha em telas pequenas */
+    gap: 10px; /* Espaçamento uniforme entre os botões */
+}
+
+/* LINKS DO MENU */
+nav a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: rgb(134, 88, 241); /* Cor sólida para melhor contraste */
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 0px rgb(20, 20, 20); /* Efeito 3D sutil na base do botão */
+}
+
+/* HOVER (Passar o Mouse) */
+nav a:hover, nav a.active {
+    background-color: rgb(168, 133, 247); 
+    color: rgb(255, 255, 255); 
+    transform: translateY(-3px); /* Eleva o botão */
+    box-shadow: 0 6px 0px rgb(10, 10, 10); /* Aumenta a sombra no hover */
+    text-decoration: none; /* Remove o underline apenas no menu */
+}
+
+/* CLIQUE (Active) */
+nav a:active {
+    transform: translateY(2px); /* Botão "afunda" ao clicar */
+    box-shadow: 0 1px 0px rgb(0, 0, 0);
+}
+
+/* CONTEÚDO */
+main {
+    max-width: 850px;
+    width: 100%;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.2); 
+    padding: 25px;
+    border-radius: 20px;
+    flex: 1;
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+h2 {
+    font-size: 1.6rem;
+    color: rgb(0, 251, 255); /* Ciano brilhante em formato RGB */
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+p {
+    text-align: justify;
+    line-height: 1.6; /* Melhora a leitura de blocos de texto */
+    margin-bottom: 20px;
+}
+
+ul {
+    text-align: left;
+    margin: 20px auto;
+    max-width: 700px;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 12px;
+}
+
+/* CARDS DE COMPONENTES (Para destacar cada item no conteúdo) */
+.componente-card {
+    background-color: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.componente-card h2 {
+    text-align: center;
+}
+
+/* LINKS DO SITE E VÍDEOS */
+a {
+    color: rgb(0, 251, 255); 
+    text-decoration: none;
+    font-weight: bold; 
+    transition: 0.3s;
+}
+
+a:hover {
+    color: rgb(255, 255, 255); /* Muda para branco quando passa o mouse */
+    text-decoration: underline;
+}
+
+.video-container {
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* RODAPÉ */
+footer {
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
