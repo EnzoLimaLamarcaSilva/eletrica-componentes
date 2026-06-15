@@ -149,3 +149,22 @@ footer {
     font-size: 0.85rem;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+/* AJUSTE DE IMAGENS E VÍDEOS RESPONSIVOS (CORREÇÃO PARA CELULAR) */
+img, video {
+    width: 100%;            /* Ocupa toda a largura disponível em telas pequenas */
+    max-width: 360px;       /* Limita o tamanho máximo a 360px em telas grandes */
+    height: auto;           /* Calcula a altura proporcionalmente para não distorcer */
+    max-height: 360px;      /* Garante que não fique gigante verticalmente */
+    object-fit: contain;    /* Mantém o vídeo/imagem bem enquadrado na proporção correta */
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin: 15px auto;      /* Centraliza horizontalmente */
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+}
+
+img:hover, video:hover {
+    transform: scale(1.02); /* Leve zoom ao passar o mouse */
+}
