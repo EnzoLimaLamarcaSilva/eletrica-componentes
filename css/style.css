@@ -168,3 +168,21 @@ img, video {
 img:hover, video:hover {
     transform: scale(1.02); /* Leve zoom ao passar o mouse */
 }
+
+/* CONTAINER PARA IMAGENS LADO A LADO */
+.imagens-duplas {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Faz virar uma embaixo da outra no celular */
+    margin: 20px 0;
+    width: 100%;
+}
+
+/* Ajuste fino para as imagens dentro desse container */
+.imagens-duplas img {
+    margin: 0; /* Remove a margem individual para o flexbox controlar o espaçamento */
+    flex: 1;
+    min-width: 250px; /* Impede que fiquem esmagadas */
+    max-width: 360px;
+}
