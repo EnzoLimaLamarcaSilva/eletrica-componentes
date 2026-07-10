@@ -366,3 +366,140 @@ img:hover, video:hover {
         font-size: 2.5rem;
     }
 }
+
+/* CONTAINER DA BANCADA */
+.cadesimu-sandbox {
+    background-color: #141414;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 25px auto;
+    max-width: 950px;
+}
+
+/* WORKSPACE: A GRADE DO CADESIMU */
+.sandbox-workspace {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background-color: #1e1e1e;
+    /* Criando o efeito de grade pontilhada/quadriculada técnica */
+    background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    touch-action: none; /* Impede o celular de rolar a página enquanto arrasta o componente */
+}
+
+/* COMPONENTES ARRASTÁVEIS */
+.draggable-comp {
+    position: absolute;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    cursor: move;
+    user-select: none;
+    width: 130px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    transition: box-shadow 0.2s;
+}
+
+.draggable-comp:active {
+    box-shadow: 0 8px 16px rgba(0, 251, 255, 0.3);
+    z-index: 100; /* Garante que o componente sendo arrastado fique por cima */
+}
+
+/* Alça para arrastar */
+.drag-handle {
+    background-color: #3a3a3a;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 4px;
+    text-align: center;
+    border-bottom: 1px solid #555;
+    color: #bbb;
+    border-radius: 5px 5px 0 0;
+}
+
+.comp-body {
+    padding: 15px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 65px;
+    box-sizing: border-box;
+}
+
+/* ESTILOS DO DISJUNTOR */
+.disjuntor-corpo { background-color: #222; }
+.status-badge {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+    color: #fff;
+}
+.status-badge.aberto { background-color: #dc3545; }
+.status-badge.fechado { background-color: #28a745; box-shadow: 0 0 10px #28a745; }
+
+/* ESTILOS DOS BOTÕES */
+.btn-simulado {
+    font-weight: bold;
+    color: white;
+    width: 80%;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 8px 0;
+    box-shadow: 0 3px 0 #000;
+}
+.btn-simulado.vermelho { background-color: #a72834; }
+.btn-simulado.vermelho:active { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
+.btn-simulado.verde { background-color: #218838; }
+.btn-simulado.verde:active { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
+
+/* ESTILOS DO MOTOR */
+.motor-corpo {
+    background-color: #444;
+    border-radius: 0 0 5px 5px;
+    position: relative;
+}
+.motor-text { font-size: 0.75rem; font-weight: bold; color: #fff; z-index: 2; }
+.eixo-rotativo {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border: 3px dashed #00fbff;
+    border-radius: 50%;
+    opacity: 0.2;
+    transition: opacity 0.3s;
+}
+
+/* Animação de rotação do CADe SIMU */
+@keyframes girar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.draggable-comp.ligado .eixo-rotativo {
+    opacity: 1;
+    animation: girar 0.4s infinite linear;
+}
+.draggable-comp.ligado {
+    border-color: #00fbff;
+}
+
+/* BARRA DE FEEDBACK */
+.status-bar-sim {
+    margin-top: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    border-left: 4px solid rgb(134, 88, 241);
+}
