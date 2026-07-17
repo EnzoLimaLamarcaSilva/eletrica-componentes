@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 motorLigado = true;
                 feedback.textContent = "Contator K1 acionado. Motor girando perfeitamente!";
             } else {
-                feedback.textContent = "❌ Impossível ligar: O disjuntor Q1 está aberto e o circuito está sem energia!";
+                feedback.textContent = "Impossível ligar: O disjuntor Q1 está aberto e o circuito está sem energia!";
             }
         } 
         else if (id === "comp-s0") {
