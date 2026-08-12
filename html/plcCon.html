@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Conceitos de PLC - Automação Industrial</title>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="../index.html">Introdução</a>
+        <a href="./protecao.html">Proteção</a>
+        <a href="./manobra.html">Controle</a>
+        <a href="./motores.html">Motores</a>
+        <a href="./lab.html">Laboratório digital</a>
+        <a href="./cadsimu.html">Cade Simu</a>
+        <a href="./simulador.html">Simulação</a>
+        <a href="./plcCon.html" class="active">PLC Conceitos</a>
+        <a href="./plcProg.html">PLC Programação</a>
+    </nav>
+</header>
+
+<main>
+    <h1>Conceitos e Teoria do CLP</h1>
+    <p>Entenda o funcionamento interno, arquitetura, tipos de memória e módulos de E/S dos Controladores Lógicos Programáveis.</p>
+
+    <section class="componente-card">
+        <h2>O que é um CLP?</h2>
+        <div class="media-item">
+            <img src="../img/clp_img.png" alt="Controlador Lógico Programável Siemens S7-1200">
+        </div>
+        <p>O <strong>CLP (Controlador Lógico Programável)</strong> é um computador industrial projetado para automatizar processos produtivos e máquinas. Ele atua como o cérebro da automação, substituindo antigos painéis de relés por um sistema flexível e reconfigurável via software.</p>
+    </section>
+
+    <section class="componente-card">
+        <h2>Aplicações do CLP na Indústria</h2>
+        <p>Os CLPs estão presentes em diversos setores produtivos devido à sua alta confiabilidade:</p>
+        <ul>
+            <li><strong>Indústria Automobilística:</strong> Controle de braços robóticos em linhas de solda, pintura e montagem.</li>
+            <li><strong>Sistemas de Embalagem e Envase:</strong> Controle de esteiras, dosagem de líquidos e etiquetagem.</li>
+            <li><strong>Tratamento de Água:</strong> Automação de bombas, controle de fluxo e nível de reservatórios.</li>
+            <li><strong>Refrigeração Industrial:</strong> Controle de temperatura e pressão em câmaras frigoríficas.</li>
+        </ul>
+
+        <div class="media-lado-a-lado">
+            <div class="media-item">
+                <img src="../img/plc_industria_esteira.jpg" alt="CLP controlando esteira industrial">
+            </div>
+            <div class="media-item">
+                <img src="../img/plc_industria_painel.jpg" alt="Painel elétrico com CLP">
+            </div>
+        </div>
+    </section>
+
+    <section class="componente-card">
+        <h2>Ciclo de Operação do PLC (Scan Cycle)</h2>
+        <p>O CLP executa suas tarefas continuamente em um ciclo fechado de 3 etapas:</p>
+        <ol>
+            <li><strong>1. Leitura das Entradas:</strong> Lê o estado dos sensores e botões conectados às portas físicas.</li>
+            <li><strong>2. Execução do Programa:</strong> Processa a lógica de programação criada pelo usuário linha por linha.</li>
+            <li><strong>3. Atualização das Saídas:</strong> Envia comandos elétricos para acionar motores, válvulas e atuadores.</li>
+        </ol>
+
+        <div class="media-item">
+            <img src="../img/ciclo_varredura_scan.png" alt="Fluxograma do Ciclo de Varredura do CLP">
+        </div>
+    </section>
+
+    <section class="componente-card">
+        <h2>Sistema de Memória do CLP</h2>
+        <ul>
+            <li><strong>Memória de Programa (Flash/ROM):</strong> Armazena o código escrito pelo usuário. Não se apaga ao desligar.</li>
+            <li><strong>Memória de Dados (RAM):</strong> Guarda valores temporários como contadores, temporizadores e variáveis.</li>
+            <li><strong>Imagem de Entradas e Saídas (PII / PIO):</strong> Espelha instantaneamente os sinais elétricos dos Bornes físicos.</li>
+        </ul>
+    </section>
+
+    <section class="componente-card">
+        <h2>Organização da Memória: Bit, Byte e Word</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; color: inherit;">
+            <thead>
+                <tr style="border-bottom: 2px solid #666; text-align: left;">
+                    <th style="padding: 8px;">Tipo</th>
+                    <th style="padding: 8px;">Tamanho</th>
+                    <th style="padding: 8px;">Descrição e Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #444;">
+                    <td style="padding: 8px;"><strong>Bit</strong></td>
+                    <td style="padding: 8px;">1 bit</td>
+                    <td style="padding: 8px;">Estados Ligado/Desligado (0 ou 1). Ex: Botão Pressionado.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #444;">
+                    <td style="padding: 8px;"><strong>Byte</strong></td>
+                    <td style="padding: 8px;">8 Bits</td>
+                    <td style="padding: 8px;">Conjunto de 8 bits. Valores inteiros de 0 a 255.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #444;">
+                    <td style="padding: 8px;"><strong>Word</strong></td>
+                    <td style="padding: 8px;">16 Bits</td>
+                    <td style="padding: 8px;">Utilizada para leitura de sensores analógicos de precisão.</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;"><strong>DWord</strong></td>
+                    <td style="padding: 8px;">32 Bits</td>
+                    <td style="padding: 8px;">Usada para contagens elevadas ou números decimais (ponto flutuante).</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="componente-card">
+        <h2>Módulos de Entrada e Saída (I/O)</h2>
+        <ul>
+            <li><strong>Entradas/Saídas Digitais:</strong> Tratam sinais do tipo LIGADO/DESLIGADO (0V ou 24V DC). Ex: Chaves, botões e contatores.</li>
+            <li><strong>Entradas/Saídas Analógicas:</strong> Tratam variações contínuas de tensão ou corrente (ex: 0-10V ou 4-20mA). Ex: Sensores de temperatura e inversores.</li>
+        </ul>
+
+        <div class="media-item">
+            <img src="../img/modulos_io_clp.png" alt="Módulos de Entrada e Saída do CLP">
+        </div>
+    </section>
+</main>
+
+<footer>
+    <small>
+        Todos direitos &copy; reservados a Enzo Silva&trade;<br>
+        Agradecimento especial para José "Maçaneiro" Carlos "Filho" Izabeli "Souza" Adriana "Adolfo" e SENAI
+    </small>
+</footer>
+</body>
+</html>

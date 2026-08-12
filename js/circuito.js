@@ -1,53 +1,147 @@
 document.addEventListener("DOMContentLoaded", () => {
+    let simulacaoAtiva = false;
+    let disjuntorFechado = false;
+    let sentidoRotacao = "desligado"; 
+
     const workspace = document.getElementById("workspace");
     const feedback = document.getElementById("sistema-feedback");
-
-    // Variáveis lógicas do Circuito Elétrico
-    let disjuntorFechado = false;
-    let motorLigado = false;
-
-    // Elementos dos componentes para atualizar visualmente
+    const btnPlay = document.getElementById("btn-play");
+    const btnStop = document.getElementById("btn-stop");
+    
     const compQ1 = document.getElementById("comp-q1");
+    const badgeQ1 = document.getElementById("badge-q1");
+    const compS0 = document.getElementById("comp-s0");
+    const compS1 = document.getElementById("comp-s1");
+    const compS2 = document.getElementById("comp-s2");
+    
+    const lampH1 = document.getElementById("lamp-h1");
+    const lampH2 = document.getElementById("lamp-h2");
     const compMotor = document.getElementById("comp-motor");
 
-    // Variáveis de controle do Drag and Drop
+    function atualizarSimulacao() {
+        compMotor.classList.remove("ligado-horario", "ligado-anti-horario");
+        if (lampH1) lampH1.classList.remove("ativa");
+        if (lampH2) lampH2.classList.remove("ativa");
+
+        if (!simulacaoAtiva) {
+            feedback.textContent = "Simulação pausada. Clique em ▶ Simular no topo para energizar a bancada.";
+            return;
+        }
+
+        if (!disjuntorFechado) {
+            sentidoRotacao = "desligado";
+            feedback.textContent = "Comando desenergizado. Clique no Disjuntor -Q1 para fechar o circuito.";
+            return;
+        }
+
+        if (sentidoRotacao === "horario") {
+            compMotor.classList.add("ligado-horario");
+            if (lampH1) lampH1.classList.add("ativa");
+            feedback.textContent = "Motor M1 girando no sentido HORÁRIO (Contator K1 e Lâmpada H1 ativos).";
+        } else if (sentidoRotacao === "anti-horario") {
+            compMotor.classList.add("ligado-anti-horario");
+            if (lampH2) lampH2.classList.add("ativa");
+            feedback.textContent = "Motor M1 girando no sentido ANTI-HORÁRIO (Contator K2 e Lâmpada H2 ativos).";
+        } else {
+            feedback.textContent = "Circuito energizado e pronto. Pressione S1 (↻ Horário) ou S2 (↺ Anti-Horário).";
+        }
+    }
+
+    btnPlay.addEventListener("click", () => {
+        simulacaoAtiva = true;
+        atualizarSimulacao();
+    });
+
+    btnStop.addEventListener("click", () => {
+        simulacaoAtiva = false;
+        sentidoRotacao = "desligado";
+        atualizarSimulacao();
+    });
+
+
+    compQ1.addEventListener("click", () => {
+        if (isDragging) return;
+        disjuntorFechado = !disjuntorFechado;
+        
+        if (disjuntorFechado) {
+            badgeQ1.textContent = "FECHADO";
+            badgeQ1.classList.remove("aberto");
+            badgeQ1.classList.add("fechado");
+        } else {
+            badgeQ1.textContent = "1 - 2";
+            badgeQ1.classList.remove("fechado");
+            badgeQ1.classList.add("aberto");
+        }
+        atualizarSimulacao();
+    });
+
+    compS0.addEventListener("click", () => {
+        if (isDragging) return;
+        sentidoRotacao = "desligado";
+        feedback.textContent = "Sistema desligado via botoeira S0.";
+        atualizarSimulacao();
+    });
+
+    compS1.addEventListener("click", () => {
+        if (isDragging) return;
+        if (!simulacaoAtiva || !disjuntorFechado) {
+            atualizarSimulacao();
+            return;
+        }
+        if (sentidoRotacao === "anti-horario") {
+            feedback.textContent = "INTERTRAVAMENTO: Pressione S0 para parar antes de inverter o sentido!";
+            return;
+        }
+        sentidoRotacao = "horario";
+        atualizarSimulacao();
+    });
+
+    compS2.addEventListener("click", () => {
+        if (isDragging) return;
+        if (!simulacaoAtiva || !disjuntorFechado) {
+            atualizarSimulacao();
+            return;
+        }
+        if (sentidoRotacao === "horario") {
+            feedback.textContent = "INTERTRAVAMENTO: Pressione S0 para parar antes de inverter o sentido!";
+            return;
+        }
+        sentidoRotacao = "anti-horario";
+        atualizarSimulacao();
+    });
+
     let isDragging = false;
     let currentTarget = null;
     let offsetX = 0, offsetY = 0;
     let startX = 0, startY = 0;
 
-    // --- EVENTOS DO PONTEIRO (MOUSE E TOUCH JUNTOS) ---
     workspace.addEventListener("pointerdown", (e) => {
         const comp = e.target.closest(".draggable-comp");
         if (comp) {
-            isDragging = true;
+            isDragging = false;
             currentTarget = comp;
-            
-            // Registra onde o clique começou para diferenciar de um clique simples
             startX = e.clientX;
             startY = e.clientY;
 
-            // Ativa a captura do ponteiro (evita bugs ao arrastar rápido demais)
             comp.setPointerCapture(e.pointerId);
-
             const rect = comp.getBoundingClientRect();
-            const wRect = workspace.getBoundingClientRect();
-            
+
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
         }
     });
 
     workspace.addEventListener("pointermove", (e) => {
-        if (!isDragging || !currentTarget) return;
+        if (!currentTarget) return;
+
+        if (Math.hypot(e.clientX - startX, e.clientY - startY) > 5) {
+            isDragging = true;
+        }
 
         const wRect = workspace.getBoundingClientRect();
-        
-        // Calcula a nova posição dentro do quadradinho do painel
         let x = e.clientX - wRect.left - offsetX;
         let y = e.clientY - wRect.top - offsetY;
 
-        // Limita o componente dentro das bordas da grade
         x = Math.max(0, Math.min(x, wRect.width - currentTarget.offsetWidth));
         y = Math.max(0, Math.min(y, wRect.height - currentTarget.offsetHeight));
 
@@ -55,70 +149,10 @@ document.addEventListener("DOMContentLoaded", () => {
         currentTarget.style.top = `${y}px`;
     });
 
-    workspace.addEventListener("pointerup", (e) => {
-        if (!isDragging || !currentTarget) return;
-
-        currentTarget.releasePointerCapture(e.pointerId);
-
-        // Calcula a distância movida
-        const diffX = Math.abs(e.clientX - startX);
-        const diffY = Math.abs(e.clientY - startY);
-
-        // Se moveu menos que 5 pixels, o usuário não queria arrastar, queria APENAS CLICAR!
-        if (diffX < 5 && diffY < 5) {
-            processarCliqueComponente(currentTarget.id);
+    workspace.addEventListener("pointerup", () => {
+        if (currentTarget) {
+            currentTarget = null;
+            setTimeout(() => { isDragging = false; }, 50);
         }
-
-        isDragging = false;
-        currentTarget = null;
     });
-
-    // --- LÓGICA INTERATIVA DOS COMPONENTES ---
-    function processarCliqueComponente(id) {
-        if (id === "comp-q1") {
-            // Lógica do Disjuntor
-            disjuntorFechado = !disjuntorFechado;
-            const badge = compQ1.querySelector(".status-badge");
-            
-            if (disjuntorFechado) {
-                badge.textContent = "FECHADO";
-                badge.className = "status-badge fechado";
-                feedback.textContent = "Circuito energizado! Pronto para ligar no botão S1.";
-            } else {
-                badge.textContent = "ABERTO";
-                badge.className = "status-badge aberto";
-                // Se abrir o disjuntor com o motor rodando, derruba a energia de tudo
-                motorLigado = false;
-                feedback.textContent = "Disjuntor aberto. Circuito desarmado.";
-            }
-        } 
-        else if (id === "comp-s1") {
-            // Lógica do Botão Verde (Liga)
-            if (disjuntorFechado) {
-                motorLigado = true;
-                feedback.textContent = "Contator K1 acionado. Motor girando perfeitamente!";
-            } else {
-                feedback.textContent = "Impossível ligar: O disjuntor Q1 está aberto e o circuito está sem energia!";
-            }
-        } 
-        else if (id === "comp-s0") {
-            // Lógica do Botão Vermelho (Desliga)
-            motorLigado = false;
-            if (disjuntorFechado) {
-                feedback.textContent = "Sistema desligado via botoeira S0.";
-            }
-        }
-
-        atualizarSimulacao();
-    }
-
-    // Renderiza as mudanças de estado na tela
-    function atualizarSimulacao() {
-        if (motorLigado && disjuntorFechado) {
-            compMotor.classList.add("ligado");
-        } else {
-            compMotor.classList.remove("ligado");
-            motorLigado = false; // Força segurança lógica
-        }
-    }
 });

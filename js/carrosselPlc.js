@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // --- LÓGICA DO CARROSSEL ---
     const slides = document.querySelectorAll(".carousel-item");
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
@@ -21,23 +20,19 @@ document.addEventListener("DOMContentLoaded", () => {
     prevBtn.addEventListener("click", () => changeSlide(currentSlide - 1));
 
 
-    // --- LÓGICA DE EXPANDIR IMAGEM (LIGHTBOX) ---
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
     const carouselImages = document.querySelectorAll(".carousel-item img");
 
-    // Abrir ao clicar em qualquer imagem do carrossel
     carouselImages.forEach(img => {
         img.addEventListener("click", () => {
-            lightboxImg.src = img.src; // Copia o caminho da imagem atual
+            lightboxImg.src = img.src; 
             lightboxImg.alt = img.alt;
             lightbox.classList.add("active");
         });
     });
 
-    // Fechar ao clicar no fundo preto ou no próprio botão/imagem
     lightbox.addEventListener("click", (e) => {
-        // Só fecha se clicar no fundo, no botão de fechar ou na própria imagem aberta
         lightbox.classList.remove("active");
     });
 });
