@@ -1,158 +1,205 @@
-document.addEventListener("DOMContentLoaded", () => {
-    let simulacaoAtiva = false;
-    let disjuntorFechado = false;
-    let sentidoRotacao = "desligado"; 
+document.addEventListener('DOMContentLoaded', () => {
 
-    const workspace = document.getElementById("workspace");
-    const feedback = document.getElementById("sistema-feedback");
-    const btnPlay = document.getElementById("btn-play");
-    const btnStop = document.getElementById("btn-stop");
-    
-    const compQ1 = document.getElementById("comp-q1");
-    const badgeQ1 = document.getElementById("badge-q1");
-    const compS0 = document.getElementById("comp-s0");
-    const compS1 = document.getElementById("comp-s1");
-    const compS2 = document.getElementById("comp-s2");
-    
-    const lampH1 = document.getElementById("lamp-h1");
-    const lampH2 = document.getElementById("lamp-h2");
-    const compMotor = document.getElementById("comp-motor");
+    // =========================================
+    // 1. MENU HAMBÚRGUER (MOBILE)
+    // =========================================
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
 
-    function atualizarSimulacao() {
-        compMotor.classList.remove("ligado-horario", "ligado-anti-horario");
-        if (lampH1) lampH1.classList.remove("ativa");
-        if (lampH2) lampH2.classList.remove("ativa");
+    if (hamburgerBtn && navMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+    }
 
-        if (!simulacaoAtiva) {
-            feedback.textContent = "Simulação pausada. Clique em ▶ Simular no topo para energizar a bancada.";
-            return;
-        }
+    // =========================================
+    // 2. SISTEMA DE DRAG & DROP (TOUCH + MOUSE)
+    // =========================================
+    const workspace = document.getElementById('workspace');
+    const draggables = document.querySelectorAll('.draggable-comp');
 
-        if (!disjuntorFechado) {
-            sentidoRotacao = "desligado";
-            feedback.textContent = "Comando desenergizado. Clique no Disjuntor -Q1 para fechar o circuito.";
-            return;
-        }
+    if (workspace && draggables.length > 0) {
+        draggables.forEach(comp => {
+            const handle = comp.querySelector('.drag-handle') || comp;
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
 
-        if (sentidoRotacao === "horario") {
-            compMotor.classList.add("ligado-horario");
-            if (lampH1) lampH1.classList.add("ativa");
-            feedback.textContent = "Motor M1 girando no sentido HORÁRIO (Contator K1 e Lâmpada H1 ativos).";
-        } else if (sentidoRotacao === "anti-horario") {
-            compMotor.classList.add("ligado-anti-horario");
-            if (lampH2) lampH2.classList.add("ativa");
-            feedback.textContent = "Motor M1 girando no sentido ANTI-HORÁRIO (Contator K2 e Lâmpada H2 ativos).";
+            handle.addEventListener('pointerdown', (e) => {
+                // Evita arrastar ao clicar diretamente nos botões/badges interativos
+                if (e.target.classList.contains('btn-simulado') || e.target.classList.contains('status-badge')) {
+                    return;
+                }
+
+                isDragging = true;
+                handle.setPointerCapture(e.pointerId);
+
+                startX = e.clientX;
+                startY = e.clientY;
+                initialLeft = comp.offsetLeft;
+                initialTop = comp.offsetTop;
+
+                comp.style.zIndex = 1000;
+            });
+
+            handle.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                let newLeft = initialLeft + dx;
+                let newTop = initialTop + dy;
+
+                // Mantém os componentes dentro da área limite do workspace
+                const maxLeft = workspace.clientWidth - comp.offsetWidth;
+                const maxTop = workspace.clientHeight - comp.offsetHeight;
+
+                comp.style.left = `${Math.max(0, Math.min(newLeft, maxLeft))}px`;
+                comp.style.top = `${Math.max(0, Math.min(newTop, maxTop))}px`;
+            });
+
+            const stopDrag = (e) => {
+                if (isDragging) {
+                    isDragging = false;
+                    try {
+                        handle.releasePointerCapture(e.pointerId);
+                    } catch (err) {}
+                    comp.style.zIndex = 10;
+                }
+            };
+
+            handle.addEventListener('pointerup', stopDrag);
+            handle.addEventListener('pointercancel', stopDrag);
+        });
+    }
+
+    // =========================================
+    // 3. LÓGICA DO SIMULADOR DE COMANDOS
+    // =========================================
+    let q1Fechado = false;
+    let k1Ativo = false;
+    let k2Ativo = false;
+    let emSimulacao = true;
+
+    const btnPlay = document.getElementById('btn-play');
+    const btnStop = document.getElementById('btn-stop');
+    const badgeQ1 = document.getElementById('badge-q1');
+    const compQ1 = document.getElementById('comp-q1');
+    const btnS0 = document.getElementById('btn-s0');
+    const btnS1 = document.getElementById('btn-s1');
+    const btnS2 = document.getElementById('btn-s2');
+    const lampH1 = document.getElementById('lamp-h1');
+    const lampH2 = document.getElementById('lamp-h2');
+    const compMotor = document.getElementById('comp-motor');
+    const feedback = document.getElementById('sistema-feedback');
+
+    function atualizarEstado() {
+        // Estado do Disjuntor Q1
+        if (q1Fechado) {
+            if (badgeQ1) {
+                badgeQ1.textContent = "FECHADO";
+                badgeQ1.classList.remove('aberto');
+                badgeQ1.classList.add('fechado');
+            }
         } else {
-            feedback.textContent = "Circuito energizado e pronto. Pressione S1 (↻ Horário) ou S2 (↺ Anti-Horário).";
+            if (badgeQ1) {
+                badgeQ1.textContent = "1 - 2 (ABERTO)";
+                badgeQ1.classList.remove('fechado');
+                badgeQ1.classList.add('aberto');
+            }
+            k1Ativo = false;
+            k2Ativo = false;
+        }
+
+        // Estado dos Contatores, Lâmpadas e Motor
+        if (k1Ativo) {
+            if (lampH1) lampH1.classList.add('ativa');
+            if (lampH2) lampH2.classList.remove('ativa');
+            if (compMotor) {
+                compMotor.classList.add('ligado-horario');
+                compMotor.classList.remove('ligado-anti-horario');
+            }
+            if (feedback) feedback.textContent = "Motor girando no sentido HORÁRIO (K1 / H1 ativo).";
+        } else if (k2Ativo) {
+            if (lampH2) lampH2.classList.add('ativa');
+            if (lampH1) lampH1.classList.remove('ativa');
+            if (compMotor) {
+                compMotor.classList.add('ligado-anti-horario');
+                compMotor.classList.remove('ligado-horario');
+            }
+            if (feedback) feedback.textContent = "Motor girando no sentido ANTI-HORÁRIO (K2 / H2 ativo).";
+        } else {
+            if (lampH1) lampH1.classList.remove('ativa');
+            if (lampH2) lampH2.classList.remove('ativa');
+            if (compMotor) compMotor.classList.remove('ligado-horario', 'ligado-anti-horario');
+
+            if (feedback) {
+                if (q1Fechado) {
+                    feedback.textContent = "Circuito Energizado! Pressione -S1 (Horário) ou -S2 (Anti-Horário).";
+                } else {
+                    feedback.textContent = "Aguardando fechamento de -Q1 para energizar a linha 24V/380V...";
+                }
+            }
         }
     }
 
-    btnPlay.addEventListener("click", () => {
-        simulacaoAtiva = true;
-        atualizarSimulacao();
-    });
+    // Toggle no Disjuntor -Q1
+    if (compQ1) {
+        compQ1.addEventListener('click', (e) => {
+            if (e.target.closest('#badge-q1') || e.target.closest('.disjuntor-corpo')) {
+                if (!emSimulacao) return;
+                q1Fechado = !q1Fechado;
+                atualizarEstado();
+            }
+        });
+    }
 
-    btnStop.addEventListener("click", () => {
-        simulacaoAtiva = false;
-        sentidoRotacao = "desligado";
-        atualizarSimulacao();
-    });
+    // Botão -S1 (Liga Horário)
+    if (btnS1) {
+        btnS1.addEventListener('click', () => {
+            if (!emSimulacao || !q1Fechado) return;
+            k1Ativo = true;
+            k2Ativo = false; // Intertravamento
+            atualizarEstado();
+        });
+    }
 
+    // Botão -S2 (Liga Anti-Horário)
+    if (btnS2) {
+        btnS2.addEventListener('click', () => {
+            if (!emSimulacao || !q1Fechado) return;
+            k2Ativo = true;
+            k1Ativo = false; // Intertravamento
+            atualizarEstado();
+        });
+    }
 
-    compQ1.addEventListener("click", () => {
-        if (isDragging) return;
-        disjuntorFechado = !disjuntorFechado;
-        
-        if (disjuntorFechado) {
-            badgeQ1.textContent = "FECHADO";
-            badgeQ1.classList.remove("aberto");
-            badgeQ1.classList.add("fechado");
-        } else {
-            badgeQ1.textContent = "1 - 2";
-            badgeQ1.classList.remove("fechado");
-            badgeQ1.classList.add("aberto");
-        }
-        atualizarSimulacao();
-    });
+    // Botão -S0 (Desliga)
+    if (btnS0) {
+        btnS0.addEventListener('click', () => {
+            if (!emSimulacao) return;
+            k1Ativo = false;
+            k2Ativo = false;
+            atualizarEstado();
+        });
+    }
 
-    compS0.addEventListener("click", () => {
-        if (isDragging) return;
-        sentidoRotacao = "desligado";
-        feedback.textContent = "Sistema desligado via botoeira S0.";
-        atualizarSimulacao();
-    });
+    // Controles da Toolbar (Play / Stop)
+    if (btnPlay) {
+        btnPlay.addEventListener('click', () => {
+            emSimulacao = true;
+            if (feedback) feedback.textContent = "Simulação Ativa. Ligue o Disjuntor -Q1.";
+        });
+    }
 
-    compS1.addEventListener("click", () => {
-        if (isDragging) return;
-        if (!simulacaoAtiva || !disjuntorFechado) {
-            atualizarSimulacao();
-            return;
-        }
-        if (sentidoRotacao === "anti-horario") {
-            feedback.textContent = "INTERTRAVAMENTO: Pressione S0 para parar antes de inverter o sentido!";
-            return;
-        }
-        sentidoRotacao = "horario";
-        atualizarSimulacao();
-    });
-
-    compS2.addEventListener("click", () => {
-        if (isDragging) return;
-        if (!simulacaoAtiva || !disjuntorFechado) {
-            atualizarSimulacao();
-            return;
-        }
-        if (sentidoRotacao === "horario") {
-            feedback.textContent = "INTERTRAVAMENTO: Pressione S0 para parar antes de inverter o sentido!";
-            return;
-        }
-        sentidoRotacao = "anti-horario";
-        atualizarSimulacao();
-    });
-
-    let isDragging = false;
-    let currentTarget = null;
-    let offsetX = 0, offsetY = 0;
-    let startX = 0, startY = 0;
-
-    workspace.addEventListener("pointerdown", (e) => {
-        const comp = e.target.closest(".draggable-comp");
-        if (comp) {
-            isDragging = false;
-            currentTarget = comp;
-            startX = e.clientX;
-            startY = e.clientY;
-
-            comp.setPointerCapture(e.pointerId);
-            const rect = comp.getBoundingClientRect();
-
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
-        }
-    });
-
-    workspace.addEventListener("pointermove", (e) => {
-        if (!currentTarget) return;
-
-        if (Math.hypot(e.clientX - startX, e.clientY - startY) > 5) {
-            isDragging = true;
-        }
-
-        const wRect = workspace.getBoundingClientRect();
-        let x = e.clientX - wRect.left - offsetX;
-        let y = e.clientY - wRect.top - offsetY;
-
-        x = Math.max(0, Math.min(x, wRect.width - currentTarget.offsetWidth));
-        y = Math.max(0, Math.min(y, wRect.height - currentTarget.offsetHeight));
-
-        currentTarget.style.left = `${x}px`;
-        currentTarget.style.top = `${y}px`;
-    });
-
-    workspace.addEventListener("pointerup", () => {
-        if (currentTarget) {
-            currentTarget = null;
-            setTimeout(() => { isDragging = false; }, 50);
-        }
-    });
+    if (btnStop) {
+        btnStop.addEventListener('click', () => {
+            emSimulacao = false;
+            q1Fechado = false;
+            k1Ativo = false;
+            k2Ativo = false;
+            atualizarEstado();
+            if (feedback) feedback.textContent = "Simulação Parada. Pressione Simular para reiniciar.";
+        });
+    }
 });

@@ -8,7 +8,8 @@
 </head>
 <body>
 <header>
-    <nav>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir Menu">&#9776; Menu</button>
+    <nav id="navMenu">
         <a href="../index.html">Introdução</a>
         <a href="./protecao.html">Proteção</a>
         <a href="./manobra.html">Controle</a>
@@ -16,7 +17,7 @@
         <a href="./lab.html">Laboratório digital</a>
         <a href="./cadsimu.html">Cade Simu</a>
         <a href="./simulador.html" class="active">Simulação</a>
-        <a href="./plcCon.html">PLC Coceitos</a>
+        <a href="./plcCon.html">PLC Conceitos</a>
         <a href="./plcProg.html">PLC Programação</a>
     </nav>
 </header>
@@ -32,83 +33,85 @@
         <span class="tb-title">CADe_SIMU - Circuito de Reversão de Motor</span>
     </div>
 
-    <div class="sandbox-workspace cadesimu-canvas" id="workspace">
-        
-        <div class="grid-cols"><span>A</span><span>B</span><span>C</span><span>D</span></div>
-        <div class="grid-rows"><span>1</span><span>2</span><span>3</span></div>
+    <div class="cadesimu-canvas-wrapper">
+        <div class="sandbox-workspace cadesimu-canvas" id="workspace">
+            
+            <div class="grid-cols"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+            <div class="grid-rows"><span>1</span><span>2</span><span>3</span></div>
 
-        <div class="circuit-section-title" style="left: 40px; top: 25px;">[ CIRCUITO DE COMANDO 24V ]</div>
+            <div class="circuit-section-title" style="left: 40px; top: 25px;">[ CIRCUITO DE COMANDO 24V ]</div>
 
-        <div class="draggable-comp" id="comp-q1" style="left: 50px; top: 55px;">
-            <div class="drag-handle">-Q1 (Comando)</div>
-            <div class="comp-body disjuntor-corpo">
-                <span class="status-badge aberto" id="badge-q1">1 - 2</span>
+            <div class="draggable-comp" id="comp-q1" style="left: 50px; top: 55px;">
+                <div class="drag-handle">-Q1 (Comando)</div>
+                <div class="comp-body disjuntor-corpo">
+                    <span class="status-badge aberto" id="badge-q1">1 - 2</span>
+                </div>
             </div>
-        </div>
 
-        <div class="draggable-comp" id="comp-se" style="left: 50px; top: 135px;">
-            <div class="drag-handle">-SE (Térmico)</div>
-            <div class="comp-body">
-                <span class="symbol-terminals">11 - 12</span>
+            <div class="draggable-comp" id="comp-se" style="left: 50px; top: 135px;">
+                <div class="drag-handle">-SE (Térmico)</div>
+                <div class="comp-body">
+                    <span class="symbol-terminals">11 - 12</span>
+                </div>
             </div>
-        </div>
 
-        <div class="draggable-comp" id="comp-s0" style="left: 50px; top: 215px;">
-            <div class="drag-handle">-S0 (Parar)</div>
-            <div class="comp-body">
-                <div class="btn-simulado vermelho">DESLIGA</div>
+            <div class="draggable-comp" id="comp-s0" style="left: 50px; top: 215px;">
+                <div class="drag-handle">-S0 (Parar)</div>
+                <div class="comp-body">
+                    <div class="btn-simulado vermelho" id="btn-s0">DESLIGA</div>
+                </div>
             </div>
-        </div>
 
-        <div class="draggable-comp" id="comp-s1" style="left: 190px; top: 215px;">
-            <div class="drag-handle">-S1 (Horário)</div>
-            <div class="comp-body">
-                <div class="btn-simulado verde">LIGA ↻</div>
+            <div class="draggable-comp" id="comp-s1" style="left: 190px; top: 215px;">
+                <div class="drag-handle">-S1 (Horário)</div>
+                <div class="comp-body">
+                    <div class="btn-simulado verde" id="btn-s1">LIGA ↻</div>
+                </div>
             </div>
-        </div>
 
-        <div class="draggable-comp" id="comp-s2" style="left: 330px; top: 215px;">
-            <div class="drag-handle">-S2 (Anti-Hor.)</div>
-            <div class="comp-body">
-                <div class="btn-simulado verde">LIGA ↺</div>
+            <div class="draggable-comp" id="comp-s2" style="left: 330px; top: 215px;">
+                <div class="drag-handle">-S2 (Anti-Hor.)</div>
+                <div class="comp-body">
+                    <div class="btn-simulado verde" id="btn-s2">LIGA ↺</div>
+                </div>
             </div>
-        </div>
 
-        <div class="draggable-comp" id="comp-k1" style="left: 190px; top: 300px;">
-            <div class="drag-handle">-K1 (Sentido 1)</div>
-            <div class="comp-body coil-body">
-                <span class="coil-label">A1 - A2</span>
-                <div class="pilot-lamp h1-lamp" id="lamp-h1" title="H1 - Horário">H1</div>
+            <div class="draggable-comp" id="comp-k1" style="left: 190px; top: 300px;">
+                <div class="drag-handle">-K1 (Sentido 1)</div>
+                <div class="comp-body coil-body">
+                    <span class="coil-label">A1 - A2</span>
+                    <div class="pilot-lamp h1-lamp" id="lamp-h1" title="H1 - Horário">H1</div>
+                </div>
             </div>
-        </div>
 
-        <div class="draggable-comp" id="comp-k2" style="left: 330px; top: 300px;">
-            <div class="drag-handle">-K2 (Sentido 2)</div>
-            <div class="comp-body coil-body">
-                <span class="coil-label">A1 - A2</span>
-                <div class="pilot-lamp h2-lamp" id="lamp-h2" title="H2 - Anti-Horário">H2</div>
+            <div class="draggable-comp" id="comp-k2" style="left: 330px; top: 300px;">
+                <div class="drag-handle">-K2 (Sentido 2)</div>
+                <div class="comp-body coil-body">
+                    <span class="coil-label">A1 - A2</span>
+                    <div class="pilot-lamp h2-lamp" id="lamp-h2" title="H2 - Anti-Horário">H2</div>
+                </div>
             </div>
-        </div>
 
+            <div class="circuit-section-title" style="left: 520px; top: 25px;">[ CIRCUITO DE POTÊNCIA 380V ]</div>
 
-        <div class="circuit-section-title" style="left: 520px; top: 25px;">[ CIRCUITO DE POTÊNCIA 380V ]</div>
-
-        <div class="draggable-comp" id="comp-q1-power" style="left: 550px; top: 55px;">
-            <div class="drag-handle">-Q1 (Potência)</div>
-            <div class="comp-body disjuntor-corpo">
-                <span class="symbol-terminals">1/3/5 - 2/4/6</span>
+            <div class="draggable-comp" id="comp-q1-power" style="left: 550px; top: 55px;">
+                <div class="drag-handle">-Q1 (Potência)</div>
+                <div class="comp-body disjuntor-corpo">
+                    <span class="symbol-terminals">1/3/5 - 2/4/6</span>
+                </div>
             </div>
-        </div>
 
-        <div class="draggable-comp" id="comp-motor" style="left: 540px; top: 200px;">
-            <div class="drag-handle">-M1 (Motor 3~)</div>
-            <div class="comp-body motor-corpo">
-                <div class="eixo-rotativo" id="eixo-motor"></div>
-                <span class="motor-text">M 3~</span>
+            <div class="draggable-comp" id="comp-motor" style="left: 540px; top: 200px;">
+                <div class="drag-handle">-M1 (Motor 3~)</div>
+                <div class="comp-body motor-corpo">
+                    <div class="eixo-rotativo" id="eixo-motor"></div>
+                    <span class="motor-text">M 3~</span>
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
+
     <div class="status-bar-sim">
         Status do Sistema: <span id="sistema-feedback">Aguardando fechamento de -Q1 para energizar a linha 24V/380V...</span>
     </div>
@@ -124,4 +127,4 @@
 
 <script src="../js/circuito.js" defer></script>
 </body>
-</html> 
+</html>

@@ -1,7 +1,15 @@
+/* =========================================
+1. RESET E CONFIGURAÇÕES GERAIS
+========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -17,12 +25,34 @@ body {
     min-height: 100vh;
 }
 
+/* =========================================
+2. CABEÇALHO E MENU HAMBÚRGUER
+========================================= */
 header {
     margin: 8px 0 20px 0;
     background: linear-gradient(to right, rgb(0, 0, 0), rgb(255, 230, 0), rgb(105, 12, 226), rgb(255, 230, 0), rgb(0, 0, 0));
-    padding: 15px 0;
+    padding: 15px 10px;
     border-radius: 12px;
     border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+}
+
+.hamburger-btn {
+    display: none;
+    background-color: rgb(134, 88, 241);
+    color: #000;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 0px rgb(20, 20, 20);
+    margin: 0 auto;
+}
+
+.hamburger-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0px rgb(0, 0, 0);
 }
 
 nav {
@@ -58,6 +88,9 @@ nav a:active {
     box-shadow: 0 1px 0px rgb(0, 0, 0);
 }
 
+/* =========================================
+3. CONTEÚDO PRINCIPAL E TIPOGRAFIA
+========================================= */
 main {
     max-width: 850px;
     width: 100%;
@@ -83,9 +116,11 @@ h2 {
 }
 
 p {
-    text-align: justify;
+    text-align: left;
     line-height: 1.6;
     margin-bottom: 20px;
+    word-break: normal;
+    overflow-wrap: break-word;
 }
 
 ul {
@@ -99,19 +134,6 @@ li {
     margin-bottom: 12px;
 }
 
-.componente-card {
-    background-color: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    text-align: left;
-}
-
-.componente-card h2 {
-    text-align: center;
-}
-
 a {
     color: rgb(0, 251, 255); 
     text-decoration: none;
@@ -122,6 +144,36 @@ a {
 a:hover {
     color: rgb(255, 255, 255);
     text-decoration: underline;
+}
+
+/* =========================================
+4. CARDS E TABELAS
+========================================= */
+.componente-card {
+    background-color: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    text-align: left; 
+    word-break: normal;
+}
+
+.componente-card h2 {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    word-wrap: break-word;
 }
 
 .video-container {
@@ -138,6 +190,9 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* =========================================
+5. MÍDIAS (IMAGENS / VÍDEOS)
+========================================= */
 img, video {
     width: 100%;
     max-width: 360px;
@@ -172,6 +227,35 @@ img:hover, video:hover {
     max-width: 360px;
 }
 
+.media-lado-a-lado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; 
+    margin-top: 15px;
+    flex-wrap: wrap; 
+}
+
+.media-item {
+    flex: 1; 
+    min-width: 280px; 
+    display: flex;
+    justify-content: center;
+}
+
+.media-item img,
+.media-item video {
+    width: 100%;
+    max-width: 400px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+    background-color: #2a2a2a; 
+    padding: 5px; 
+}
+
+/* =========================================
+6. CARROSSEL DE IMAGENS
+========================================= */
 .carousel-container {
     position: relative;
     max-width: 750px;
@@ -198,7 +282,6 @@ img:hover, video:hover {
     from { opacity: 0; transform: scale(0.98); }
     to { opacity: 1; transform: scale(1); }
 }
-
 
 .step-counter {
     font-size: 1rem;
@@ -252,22 +335,6 @@ img:hover, video:hover {
 .prev-btn { left: 15px; }
 .next-btn { right: 15px; }
 
-@media (max-width: 600px) {
-    .carousel-btn {
-        position: static;
-        transform: none !important;
-        display: inline-flex;
-        margin: 15px 15px 5px 15px;
-        box-shadow: 0 4px 0px rgb(20, 20, 20) !important;
-    }
-    .carousel-btn:hover {
-        transform: scale(1.05) !important;
-    }
-    .carousel-container {
-        text-align: center;
-    }
-}
-
 .carousel-item img {
     max-width: 580px; 
     max-height: 420px;
@@ -276,6 +343,9 @@ img:hover, video:hover {
     height: auto;
 }
 
+/* =========================================
+7. LIGHTBOX
+========================================= */
 .lightbox {
     position: fixed;
     top: 0;
@@ -343,30 +413,9 @@ img:hover, video:hover {
     color: rgb(0, 251, 255);
 }
 
-
-@media (max-width: 600px) {
-    .carousel-item img {
-        max-width: 100%; 
-    }
-    .lightbox {
-        padding: 10px;
-        align-items: flex-start; 
-    }
-    .lightbox-img {
-        max-width: 95vw;
-        max-height: 80vh;
-    }
-    .lightbox-img.zoomed {
-        width: 280vw; 
-        margin-top: 50px; 
-    }
-    .lightbox-close {
-        top: 10px;
-        right: 20px;
-        font-size: 2.5rem;
-    }
-}
-
+/* =========================================
+8. SIMULADOR CADE SIMU
+========================================= */
 .cadesimu-sandbox {
     background-color: #1a1a1a;
     padding: 15px;
@@ -375,6 +424,8 @@ img:hover, video:hover {
     margin: 20px auto;
     max-width: 950px;
     font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .cadesimu-toolbar {
@@ -411,6 +462,7 @@ img:hover, video:hover {
 .sandbox-workspace.cadesimu-canvas {
     position: relative;
     width: 100%;
+    min-width: 650px;
     height: 420px;
     background-color: #ffffff; 
     background-image: radial-gradient(#aaa 1px, transparent 1px);
@@ -464,6 +516,7 @@ img:hover, video:hover {
     flex-direction: column;
     z-index: 10;
     transition: box-shadow 0.2s, border-color 0.2s;
+    touch-action: none;
 }
 
 .draggable-comp:active {
@@ -600,36 +653,311 @@ img:hover, video:hover {
     border-left: 4px solid #8658f1;
 }
 
-.media-lado-a-lado {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; 
-    margin-top: 15px;
-    flex-wrap: wrap; 
-}
+/* =========================================
+9. MEDIA QUERIES (RESPONSIVIDADE)
+========================================= */
 
-.media-item {
-    flex: 1; 
-    min-width: 300px; 
-    display: flex;
-    justify-content: center;
-}
-
-.media-item img,
-.media-item video {
-    width: 100%;
-    max-width: 400px; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
-    background-color: #2a2a2a; 
-    padding: 5px; 
-}
-
-
+/* --- TABLETS E CELULARES (Até 768px) --- */
 @media (max-width: 768px) {
+    .hamburger-btn {
+        display: block;
+    }
+
+    nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    nav.active {
+        display: flex;
+    }
+
+    nav a {
+        width: 100%;
+        text-align: center;
+    }
+
     .media-lado-a-lado {
-        flex-direction: column; 
+        flex-direction: column;
     }
 }
 
+/* --- CELULARES (Até 600px) --- */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    main {
+        padding: 15px 10px;
+    }
+
+    h1 { 
+        font-size: 1.4rem !important; 
+        text-align: center; 
+    }
+    
+    h2 { 
+        font-size: 1.2rem !important; 
+        text-align: center; 
+    }
+
+    .componente-card {
+        width: 100% !important;
+        padding: 12px 10px !important;
+        margin-bottom: 20px;
+    }
+
+    /* Ajuste de Tabelas */
+    table {
+        display: table !important;
+        table-layout: fixed !important;
+        width: 100% !important;
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 6px 4px !important;
+        word-wrap: break-word;
+        white-space: normal !important;
+    }
+
+    table th:nth-child(1), table td:nth-child(1) { width: 22%; }
+    table th:nth-child(2), table td:nth-child(2) { width: 25%; }
+    table th:nth-child(3), table td:nth-child(3) { width: 53%; }
+
+    /* Imagens */
+    .imagens-duplas,
+    .media-lado-a-lado {
+        flex-direction: column !important;
+        align-items: center;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .media-item, 
+    .imagens-duplas img,
+    .media-item img {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Carrossel */
+    .carousel-container {
+        padding: 15px 10px;
+        text-align: center;
+    }
+
+    .carousel-item img {
+        max-width: 100%;
+        max-height: 260px;
+    }
+
+    .carousel-btn {
+        position: static;
+        transform: none !important;
+        display: inline-flex;
+        margin: 10px 10px 0 10px;
+        box-shadow: 0 4px 0px rgb(20, 20, 20) !important;
+    }
+
+    /* Toolbar do Simulador */
+    .cadesimu-toolbar {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .tb-title {
+        width: 100%;
+        text-align: center;
+        margin-top: 4px;
+    }
+}
+
+/* Container externo da bancada */
+.cadesimu-sandbox {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Envolvente da área de trabalho que ativa o scroll horizontal no celular */
+.cadesimu-canvas-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; /* Rolagem suave em dispositivos iOS */
+    touch-action: pan-x; /* Permite deslizar para os lados com o dedo */
+    border: 2px solid #333;
+    border-radius: 8px;
+}
+
+/* Área interna do circuito com largura fixa garantida */
+#workspace {
+    width: 780px; /* Largura mínima para manter os circuitos de Comando e Potência lado a lado */
+    height: 420px;
+    position: relative;
+    background-color: #f4f4f4;
+    user-select: none;
+}
+
+/* Impede que o gesto de arrastar o componente role a página ao mesmo tempo */
+.draggable-comp {
+    touch-action: none;
+}
+
+/* Ajuste no menu de navegação do topo para não quebrar no celular */
+header nav {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+}
+
+header nav a {
+    flex: 0 0 auto;
+}
+
+/* =========================================
+   HEADER & MENU MOBILE SUSPENSO
+   ========================================= */
+header {
+    position: relative;
+    background-color: #111;
+    padding: 10px 15px;
+    z-index: 1000;
+}
+
+.hamburger-btn {
+    display: none;
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+header nav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+header nav a.active {
+    background: #6c5ce7;
+}
+
+/* Regras para Celular */
+@media (max-width: 768px) {
+    .hamburger-btn {
+        display: inline-block;
+    }
+
+    header nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #1a1a1a;
+        flex-direction: column;
+        padding: 15px;
+        box-sizing: border-box;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+        z-index: 9999;
+        border-bottom: 3px solid #6c5ce7;
+    }
+
+    /* Exibe o menu suspenso sobrepondo a página sem apagar a interface de trás */
+    header nav.active {
+        display: flex;
+    }
+
+    header nav a {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 12px;
+    }
+}
+
+/* =========================================
+   SIMULADOR E BANCADA COM SCROLL
+   ========================================= */
+.cadesimu-sandbox {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Ajusta a barra de botões no topo da simulação */
+.cadesimu-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 10px;
+    background: #222;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.tb-title {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Envoltório com rolagem horizontal ativada */
+.cadesimu-canvas-wrapper {
+    width: 100%;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    border: 2px solid #333;
+    background: #1e1e1e;
+    box-sizing: border-box;
+    display: block;
+}
+
+/* Força a largura mínima de 780px no canvas */
+#workspace {
+    width: 780px !important;
+    min-width: 780px !important;
+    height: 420px;
+    position: relative;
+    background-color: #f4f4f4;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Scrollbar visível e estilizada para celular */
+.cadesimu-canvas-wrapper::-webkit-scrollbar {
+    height: 10px;
+}
+.cadesimu-canvas-wrapper::-webkit-scrollbar-thumb {
+    background: #6c5ce7;
+    border-radius: 5px;
+}
+.cadesimu-canvas-wrapper::-webkit-scrollbar-track {
+    background: #222;
+}
